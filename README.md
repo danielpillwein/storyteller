@@ -37,6 +37,22 @@ Die App ist dann erreichbar unter: **http://localhost:3000**
 7. "Hochladen" drücken
 8. Fertig! ✨
 
+## 🐳 Deployment mit Docker
+
+Für ein einfaches und persistentes Deployment kann Docker verwendet werden:
+
+### 1. Container starten
+```bash
+docker-compose up -d
+```
+
+### 2. Container stoppen
+```bash
+docker-compose down
+```
+
+**Hinweis:** Die Aufnahmen und Metadaten werden im lokalen Ordner `stories/` gespeichert und bleiben auch beim Neustart des Containers erhalten.
+
 
 
 ## 📁 Ordnerstruktur
