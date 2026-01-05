@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Nimm eine Story für Nina und Dani auf!">
+    <title>Erzähl uns was</title>
+
+    <!-- Preload Critical Font (Bold only) -->
+    <link rel="preload" href="assets/fonts/inter-bold.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Critical CSS (Minimal) -->
+    <style>
+        :root {
+            --color-bg: #2C4246;
+            --color-primary: #6CC7D2;
+            --color-card: #FFFFFF;
+            --color-text: #2E2E2E;
+            --color-text-secondary: #8A8A8A;
+            --color-btn-primary: #4A6369;
+            --color-btn-text: #FFFFFF;
+            --color-danger: #DC2626;
+            --radius-card: 32px;
+            --radius-btn: 28px;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        @font-face {
+            font-family: 'Inter';
+            src: url('assets/fonts/inter-bold.woff2') format('woff2');
+            font-weight: 700;
+            font-display: optional;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--color-bg);
+            /* Background image hidden from Lighthouse LCP if possible, or loaded later.
+               Keeping it simple for critical path. */
+            background-image: url('assets/bg-pattern.png');
+            background-size: 200px;
+            color: var(--color-text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            animation: fadeIn .4s ease-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .screen-content {
+            background: var(--color-card);
+            padding: 32px 24px;
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            /* LCP Optimization: Contain layout */
+            contain: content;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .description {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 56px;
+            border-radius: var(--radius-btn);
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            background: var(--color-btn-primary);
+            color: var(--color-btn-text);
+            box-shadow: 0 10px 20px rgba(74, 99, 105, 0.2);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Error overlay hidden */
+        .overlay {
+            display: none;
+        }
+    </style>
+
+    <!-- Defer Main CSS -->
+    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="styles.css">
+    </noscript>
+
+    <!-- Zero-Cost Bootstrap -->
+    <script src="bootstrap.js" defer></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Screen 1: Welcome (LCP Content) -->
+        <div id="screen-welcome" class="screen active">
+            <div class="screen-content">
+                <h1>Grüß dich!</h1>
+                <p class="description">
+                    Schon mal was lustiges mit Nina und/oder Dani erlebt?
+                    <br><br>
+                    Erzähls uns!
+                </p>
+                <button id="btn-start" class="btn">
+                    Aufnahme starten
+                </button>
+            </div>
+        </div>
+
+        <!-- Hidden Screens Container -->
+        <div id="screen-recording" class="screen">
+            <!-- Content populated by CSS only initially to keep DOM light, but detailed structure needed for app.js -->
+            <div class="screen-content">
+                <div class="recording-indicator">
+                    <div class="recording-dot"></div>
+                    <span>wir hören fleißig zu...</span>
+                </div>
+                <br><br>
+                <div class="timer" id="timer">00:00</div>
+                <p class="limit-notice">Max. 5 Minuten</p>
+                <div class="waveform">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <button id="btn-stop" class="btn" style="background: var(--color-danger);">
+                    Story Ende, Gänsehose
+                </button>
+            </div>
+        </div>
+
+        <div id="screen-preview" class="screen">
+            <div class="screen-content">
+                <h2>Danke fürs Erzählen :)<br><br></h2>
+                <div class="audio-player"><audio id="audio-preview" controls></audio></div>
+                <div class="input-group">
+                    <label class="input-label" style="text-align: center;"><br>Wer bist du eigentlich?</label>
+                    <input type="text" id="input-author" class="text-input" placeholder="Dein Name">
+                </div>
+                <div class="category-section">
+                    <br>
+                    <label class="input-label">Um wen geht es in der Story?</label>
+                    <div class="category-options">
+                        <label class="category-option">
+                            <input type="radio" name="category" value="nina">
+                            <span class="category-label"><span class="category-icon"><img src="assets/icon-nina.png"
+                                        width="24" height="24"></span>Nina</span>
+                        </label>
+                        <label class="category-option">
+                            <input type="radio" name="category" value="dani">
+                            <span class="category-label"><span class="category-icon"><img src="assets/icon-dani.png"
+                                        width="24" height="24"></span>Dani</span>
+                        </label>
+                        <label class="category-option">
+                            <input type="radio" name="category" value="beide">
+                            <span class="category-label"><span class="category-icon"><img src="assets/icon-beide.png"
+                                        width="24" height="24"></span>Beide</span>
+                        </label>
+                        <br>
+                    </div>
+                </div>
+                <!-- Buttons dynamically updated in JS, but static here for layout -->
+                <div class="button-group">
+                    <button id="btn-upload" class="btn" disabled>Hochladen</button>
+                    <button id="btn-discard" class="btn"
+                        style="background:transparent; color: #8A8A8A; box-shadow:none; margin-top: 10px;">
+                        <img src="assets/icon-discard.svg"
+                            style="width:20px; margin-right:8px; vertical-align:middle;">War scheiße, nochmal
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-uploading" class="screen">
+            <div class="screen-content">
+                <div class="loader"></div>
+                <h2>Chill kurz...</h2>
+                <p class="description">Deine Story wird gespeichert.</p>
+            </div>
+        </div>
+
+        <div id="screen-success" class="screen">
+            <div class="screen-content">
+                <div class="icon-large">
+                    <img src="assets/icon-success.svg">
+                </div>
+                <h1>Muchas gracias!</h1>
+                <p class="description">Deine Story wurde erfolgreich gespeichert.</p>
+                <button id="btn-another" class="btn">
+                    Hab noch mehr zu erzählen...
+                </button>
+            </div>
+        </div>
+
+        <div id="error-overlay" class="overlay">
+            <div class="overlay-content">
+                <div class="icon-large" style="background:#FEF2F2; color:#DC2626;">
+                    <img src="assets/icon-error.svg">
+                </div>
+                <h2>Hoppla</h2>
+                <p id="error-message" class="description">Fehler aufgetreten.</p>
+                <div class="button-group">
+                    <button id="btn-retry" class="btn">Erneut versuchen</button>
+                    <button id="btn-cancel" class="btn"
+                        style="background:transparent; color:var(--color-text-secondary); box-shadow:none;">Abbrechen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

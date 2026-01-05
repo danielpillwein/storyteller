@@ -1,0 +1,513 @@
+
+/* ========================================
+CSS Variables / Design Tokens (Soft UI Theme)
+======================================== */
+@font-face {
+font-family: 'Inter';
+src: url('assets/fonts/inter-regular.woff2') format('woff2');
+font-weight: 400;
+font-style: normal;
+font-display: swap;
+}
+@font-face {
+font-family: 'Inter';
+src: url('assets/fonts/inter-bold.woff2') format('woff2');
+font-weight: 700;
+font-style: normal;
+font-display: swap;
+}
+@font-face {
+font-family: 'Inter';
+src: url('assets/fonts/inter-semibold.woff2') format('woff2');
+font-weight: 600;
+font-style: normal;
+font-display: swap;
+}
+:root {
+/* Palette derived from "CarPoolin" Soft UI Reference */
+--color-bg: #2C4246;
+/* Deep Dark Teal Background */
+--color-primary: #6CC7D2;
+/* Vibrant Cyan/Turquoise */
+--color-primary-light: #BFEFF4;
+/* Lighter Cyan for backgrounds */
+--color-card: #FFFFFF;
+--color-text: #2E2E2E;
+/* Main Text */
+--color-text-secondary: #8A8A8A;
+/* Secondary Text */
+--color-text-white: #FFFFFF;
+/* Text on dark backgrounds */
+--color-btn-primary: #4A6369;
+/* Dark Slate Blue (Search/Order buttons) */
+--color-btn-text: #FFFFFF;
+--color-border: #F0F0F0;
+--color-danger: #ef4444;
+--color-danger-subtle: #fee2e2;
+/* Spacing & Layout */
+--spacing-xs: 4px;
+--spacing-sm: 8px;
+--spacing-md: 16px;
+--spacing-lg: 24px;
+--spacing-xl: 32px;
+--spacing-2xl: 48px;
+--radius-card: 32px;
+/* Very rounded cards */
+--radius-btn: 28px;
+/* Pill buttons */
+--radius-input: 16px;
+--shadow-card: 0 12px 40px rgba(0, 0, 0, 0.15);
+/* Soft, deep shadow */
+--shadow-float: 0 8px 20px rgba(108, 199, 210, 0.25);
+/* Colored shadow for accents */
+--font-main: 'Inter', system-ui, -apple-system, sans-serif;
+--transition-base: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+/* ========================================
+Reset & Base Styles
+======================================== */
+*,
+*::before,
+*::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+body {
+font-family: var(--font-main);
+/* FIXED variable name */
+background: var(--color-bg) url('assets/bg-pattern.png');
+background-repeat: repeat;
+background-size: 200px;
+/* Adjustable scale for the pattern */
+color: var(--color-text);
+line-height: 1.6;
+min-height: 100vh;
+min-height: 100dvh;
+overflow-x: hidden;
+-webkit-font-smoothing: antialiased;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+/* ========================================
+Layout & Container
+======================================== */
+.app-container {
+width: 100%;
+max-width: 480px;
+padding: 20px;
+margin: 0 auto;
+}
+.screen {
+display: none;
+width: 100%;
+animation: fadeIn 0.4s ease-out;
+}
+.screen.active {
+display: block;
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(10px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+/* ========================================
+Card Design
+======================================== */
+.screen-content {
+background: var(--color-card);
+padding: var(--spacing-xl) var(--spacing-lg);
+border-radius: var(--radius-card);
+box-shadow: var(--shadow-card);
+text-align: center;
+position: relative;
+overflow: hidden;
+/* For any decorative pseudo-elements */
+}
+/* Optional: Top Decoration for Welcome/Result screens if desired,
+but keeping clean for now as per reference "Where are you going" card style */
+/* ========================================
+Typography
+======================================== */
+h1 {
+font-size: 28px;
+font-weight: 700;
+color: var(--color-text);
+margin-bottom: var(--spacing-sm);
+letter-spacing: -0.5px;
+}
+h2 {
+font-size: 20px;
+font-weight: 600;
+color: var(--color-text);
+margin-bottom: var(--spacing-md);
+}
+.description {
+color: var(--color-text-secondary);
+font-size: 16px;
+margin-bottom: var(--spacing-xl);
+line-height: 1.5;
+}
+/* ========================================
+Buttons
+======================================== */
+.btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 100%;
+height: 56px;
+/* Taller, more tactile buttons */
+padding: 0 32px;
+font-family: inherit;
+font-size: 16px;
+font-weight: 700;
+border-radius: var(--radius-btn);
+border: none;
+cursor: pointer;
+transition: var(--transition-base);
+text-decoration: none;
+-webkit-tap-highlight-color: transparent;
+}
+.btn:active:not(:disabled) {
+transform: scale(0.98);
+}
+.btn:disabled {
+opacity: 0.5;
+cursor: not-allowed;
+filter: grayscale(1);
+}
+/* Primary Button (Dark Slate from Ref) */
+.btn-primary {
+background: var(--color-btn-primary);
+color: var(--color-btn-text);
+box-shadow: 0 10px 20px rgba(74, 99, 105, 0.2);
+}
+.btn-primary:hover:not(:disabled) {
+transform: translateY(-2px);
+box-shadow: 0 14px 24px rgba(74, 99, 105, 0.25);
+}
+.btn-primary:active:not(:disabled) {
+transform: translateY(0);
+}
+/* STOP Button (Red) */
+.btn-danger {
+background: var(--color-danger);
+color: white;
+}
+.btn-danger:hover:not(:disabled) {
+background: #dc2626;
+transform: translateY(-2px);
+}
+/* Secondary Button (Ghost/Outline) */
+.btn-secondary {
+background: transparent;
+color: var(--color-text-secondary);
+height: auto;
+padding: 12px;
+margin-top: var(--spacing-sm);
+font-weight: 600;
+}
+.btn-secondary:hover {
+color: var(--color-text);
+background: rgba(0, 0, 0, 0.03);
+}
+.btn-icon {
+width: 20px;
+height: 20px;
+margin-right: 8px;
+object-fit: contain;
+}
+.button-group {
+display: flex;
+flex-direction: column;
+gap: var(--spacing-sm);
+margin-top: var(--spacing-xl);
+}
+/* ========================================
+Inputs & Forms
+======================================== */
+.input-group {
+text-align: left;
+margin-bottom: var(--spacing-lg);
+}
+.input-label {
+display: block;
+font-size: 14px;
+font-weight: 600;
+color: var(--color-btn-primary);
+/* Use slate color for labels */
+margin-bottom: 8px;
+margin-left: 4px;
+}
+.text-input {
+width: 100%;
+padding: 16px 20px;
+font-size: 16px;
+color: var(--color-text);
+background: #F8F9FA;
+border: 2px solid transparent;
+border-radius: var(--radius-input);
+transition: var(--transition-base);
+}
+.text-input:focus {
+outline: none;
+background: #FFFFFF;
+border-color: var(--color-primary);
+box-shadow: 0 0 0 4px rgba(108, 199, 210, 0.15);
+}
+.text-input::placeholder {
+color: #C0C0C0;
+}
+/* ========================================
+Category Selection (Radio Cards)
+======================================== */
+.category-options {
+display: grid;
+gap: 12px;
+}
+.category-option {
+position: relative;
+cursor: pointer;
+}
+.category-label {
+display: flex;
+align-items: center;
+gap: 16px;
+padding: 16px;
+background: #F8F9FA;
+border-radius: 20px;
+transition: var(--transition-base);
+}
+.category-icon {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+width: 48px;
+height: 48px;
+background: white;
+border-radius: 50%;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+transition: var(--transition-base);
+}
+.category-icon img {
+width: 40px;
+height: 40px;
+transition: var(--transition-base);
+}
+.category-option input {
+position: absolute;
+opacity: 0;
+}
+/* Selected State */
+.category-option input:checked+.category-label {
+background: var(--color-btn-primary);
+color: white;
+font-weight: bold;
+}
+.category-text {
+font-weight: 600;
+color: var(--color-text);
+font-size: 16px;
+}
+/* ========================================
+Recording UI
+======================================== */
+.recording-indicator {
+display: inline-flex;
+align-items: center;
+gap: 10px;
+padding: 8px 16px;
+background: #FEF2F2;
+color: #DC2626;
+border-radius: 100px;
+font-weight: 600;
+font-size: 14px;
+margin-bottom: var(--spacing-lg);
+box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+}
+.recording-dot {
+width: 10px;
+height: 10px;
+background: #DC2626;
+border-radius: 50%;
+animation: pulse 1.5s infinite;
+}
+.timer {
+font-size: 64px;
+font-weight: 700;
+color: var(--color-text);
+font-feature-settings: "tnum";
+margin: var(--spacing-md) 0;
+letter-spacing: -2px;
+}
+.limit-notice {
+font-size: 14px;
+color: var(--color-text-secondary);
+margin-top: -8px;
+margin-bottom: 24px;
+font-weight: 500;
+}
+.waveform {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 8px;
+height: 60px;
+margin-bottom: 40px;
+}
+.wave-bar {
+width: 8px;
+height: 100%;
+/* FIXED: Added height */
+background: var(--color-primary);
+border-radius: 10px;
+animation: wave 1s ease-in-out infinite;
+}
+.wave-bar:nth-child(even) {
+background: #4DB6AC;
+}
+.wave-bar:nth-child(1) {
+animation-delay: 0.0s;
+}
+.wave-bar:nth-child(2) {
+animation-delay: 0.1s;
+}
+.wave-bar:nth-child(3) {
+animation-delay: 0.2s;
+}
+.wave-bar:nth-child(4) {
+animation-delay: 0.3s;
+}
+.wave-bar:nth-child(5) {
+animation-delay: 0.4s;
+}
+@keyframes pulse {
+0% {
+transform: scale(1);
+opacity: 1;
+}
+50% {
+transform: scale(1.2);
+opacity: 0.6;
+}
+100% {
+transform: scale(1);
+opacity: 1;
+}
+}
+@keyframes wave {
+0%,
+100% {
+transform: scaleY(0.4);
+}
+50% {
+transform: scaleY(1);
+}
+}
+/* ========================================
+Success / Visuals
+======================================== */
+.icon-large {
+color: var(--color-primary);
+margin-bottom: var(--spacing-lg);
+display: inline-flex;
+padding: 24px;
+background: var(--color-primary-light);
+border-radius: 50%;
+}
+.icon-large img {
+width: 48px;
+height: 48px;
+}
+/* ========================================
+Error Overlay
+======================================== */
+.overlay {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(44, 66, 70, 0.9);
+/* Deep Teal with opacity */
+backdrop-filter: blur(8px);
+z-index: 100;
+align-items: center;
+justify-content: center;
+padding: var(--spacing-md);
+}
+.overlay.active {
+display: flex;
+}
+.overlay-content {
+background: var(--color-card);
+padding: var(--spacing-xl);
+border-radius: var(--radius-card);
+box-shadow: var(--shadow-card);
+border: 1px solid var(--color-danger-subtle);
+max-width: 400px;
+width: 100%;
+text-align: center;
+position: relative;
+animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+@keyframes slideUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+.overlay .icon-large {
+background: #FEF2F2;
+/* Light Red BG for error */
+color: var(--color-danger);
+margin-bottom: var(--spacing-md);
+}
+.overlay h2 {
+color: var(--color-text);
+}
+/* ========================================
+Loader
+======================================== */
+.loader {
+width: 50px;
+aspect-ratio: 1;
+border-radius: 50%;
+background:
+radial-gradient(farthest-side, var(--color-primary) 94%, #0000) top/8px 8px no-repeat,
+conic-gradient(#0000 30%, var(--color-primary));
+-webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+animation: l13 1s infinite linear;
+margin: 0 auto 20px auto;
+}
+@keyframes l13 {
+100% {
+transform: rotate(1turn)
+}
+}
+/* ========================================
+Mobile Optimizations
+======================================== */
+@media (max-width: 380px) {
+.h1 {
+font-size: 24px;
+}
+.timer {
+font-size: 48px;
+}
+.btn {
+height: 48px;
+padding: 0 24px;
+}
+}
+

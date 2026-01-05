@@ -1,0 +1,355 @@
+/* ========================================
+   Deferred Styles (Non-Critical)
+   Contains styles for Recording, Preview, Uploading, Success screens,
+   and any other non-fold elements.
+   ======================================== */
+
+/* Note: Base variables and resets are in critical inline CSS.
+   We only include them here if they are needed for specific overrides, 
+   but ideally we rely on cascade. 
+   
+   However, since we are removing them from here, we must ensure they are available.
+   The inline CSS will define the variables. 
+*/
+
+/* Fonts - Definitions kept here for reference or if re-requested, 
+   but critical font faces should be in critical CSS if used immediately. 
+   Actually, only used fonts are critical. */
+
+@font-face {
+    font-family: 'Inter';
+    src: url('assets/fonts/inter-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: optional; /* Optimized */
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('assets/fonts/inter-semibold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: optional; /* Optimized */
+}
+
+/* Bold is preloaded and defined in critical, but good to have here for completeness/fallback?
+   No, don't duplicate font-face downloads (browser handles it, but safer to define once).
+   We will define ALL font-faces in critical or here?
+   "Use ONE font weight above-the-fold" -> Bold.
+   So Bold is in critical. Regular/Semibold here.
+*/
+
+/* ========================================
+   Recording UI
+   ======================================== */
+.recording-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: #FEF2F2;
+    color: #DC2626;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: var(--spacing-lg);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+}
+
+.recording-dot {
+    width: 10px;
+    height: 10px;
+    background: #DC2626;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.timer {
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--color-text);
+    font-feature-settings: "tnum";
+    margin: var(--spacing-md) 0;
+    letter-spacing: -2px;
+}
+
+.limit-notice {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: -8px;
+    margin-bottom: 24px;
+    font-weight: 500;
+}
+
+.waveform {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 60px;
+    margin-bottom: 40px;
+}
+
+.wave-bar {
+    width: 8px;
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 10px;
+    animation: wave 1s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(even) {
+    background: #4DB6AC;
+}
+
+.wave-bar:nth-child(1) { animation-delay: 0.0s; }
+.wave-bar:nth-child(2) { animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wave {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(1); }
+}
+
+/* ========================================
+   Buttons (Non-Critical variants)
+   ======================================== */
+/* STOP Button (Red) */
+.btn-danger {
+    background: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Ghost/Outline) */
+.btn-secondary {
+    background: transparent;
+    color: var(--color-text-secondary);
+    height: auto;
+    padding: 12px;
+    margin-top: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.btn-secondary:hover {
+    color: var(--color-text);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.btn-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    object-fit: contain;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xl);
+}
+
+/* ========================================
+   Inputs & Forms
+   ======================================== */
+.input-group {
+    text-align: left;
+    margin-bottom: var(--spacing-lg);
+}
+
+.input-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-btn-primary);
+    margin-bottom: 8px;
+    margin-left: 4px;
+}
+
+.text-input {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 16px;
+    color: var(--color-text);
+    background: #F8F9FA;
+    border: 2px solid transparent;
+    border-radius: var(--radius-input);
+    transition: var(--transition-base);
+}
+
+.text-input:focus {
+    outline: none;
+    background: #FFFFFF;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(108, 199, 210, 0.15);
+}
+
+.text-input::placeholder {
+    color: #C0C0C0;
+}
+
+/* ========================================
+   Category Selection
+   ======================================== */
+.category-options {
+    display: grid;
+    gap: 12px;
+}
+
+.category-option {
+    position: relative;
+    cursor: pointer;
+}
+
+.category-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    background: #F8F9FA;
+    border-radius: 20px;
+    transition: var(--transition-base);
+}
+
+.category-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: var(--transition-base);
+}
+
+.category-icon img {
+    width: 40px;
+    height: 40px;
+    transition: var(--transition-base);
+}
+
+.category-option input {
+    position: absolute;
+    opacity: 0;
+}
+
+/* Selected State */
+.category-option input:checked+.category-label {
+    background: var(--color-btn-primary);
+    color: white;
+    font-weight: bold;
+}
+
+.category-text {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 16px;
+}
+
+/* ========================================
+   Success / Visuals
+   ======================================== */
+.icon-large {
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-lg);
+    display: inline-flex;
+    padding: 24px;
+    background: var(--color-primary-light);
+    border-radius: 50%;
+}
+
+.icon-large img {
+    width: 48px;
+    height: 48px;
+}
+
+/* ========================================
+   Error Overlay
+   ======================================== */
+.overlay {
+    /* Hidden by default in critical CSS, displayed flex when active */
+    display: none; 
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 66, 70, 0.9);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.overlay-content {
+    background: var(--color-card);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--color-danger-subtle);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: slideUp 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.overlay .icon-large {
+    background: #FEF2F2;
+    color: var(--color-danger);
+    margin-bottom: var(--spacing-md);
+}
+
+.overlay h2 {
+    color: var(--color-text);
+}
+
+/* ========================================
+   Loader
+   ======================================== */
+.loader {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(farthest-side, var(--color-primary) 94%, #0000) top/8px 8px no-repeat,
+        conic-gradient(#0000 30%, var(--color-primary));
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    animation: l13 1s infinite linear;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes l13 {
+    100% { transform: rotate(1turn) }
+}
+
+/* ========================================
+   Mobile Optimizations (Additional)
+   ======================================== */
+@media (max-width: 380px) {
+    .h1 { font-size: 24px; }
+    .timer { font-size: 48px; }
+    .btn { height: 48px; padding: 0 24px; }
+}

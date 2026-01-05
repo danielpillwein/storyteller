@@ -1,0 +1,7 @@
+node_modules/
+stories/
+.gemini/
+.antigravity/
+.DS_Store
+npm-debug.log*
+.env
