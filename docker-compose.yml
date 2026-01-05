@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  story-teller:
+    build: .
+    container_name: story-teller
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./stories:/app/stories
+    restart: unless-stopped
+    environment:
+      - PORT=3000
