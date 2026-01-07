@@ -51,7 +51,7 @@ docker-compose up -d
 docker-compose down
 ```
 
-**Hinweis:** Die Aufnahmen und Metadaten werden im lokalen Ordner `stories/` gespeichert und bleiben auch beim Neustart des Containers erhalten.
+**Hinweis:** Die Aufnahmen und Metadaten werden im lokalen Ordner `stories/` gespeichert und bleiben auch beim Neustart des Containers erhalten. FFmpeg ist bereits im Docker-Image enthalten.
 
 
 
@@ -94,6 +94,7 @@ PORT=8080 npm start --prefix backend
 - **Frontend**: Vanilla HTML/CSS/JS (kein Framework)
 - **Backend**: Node.js + Express
 - **Audio-Format**: WebM (Browser-nativ)
+- **Audio-Verarbeitung**: Automatisches Fixen von Metadaten und Dauer via FFmpeg (statische Binaries im Projekt enthalten)
 
 ## 🎯 Features
 

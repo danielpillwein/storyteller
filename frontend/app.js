@@ -249,10 +249,13 @@ async function uploadRecording() {
             extension = 'wav';
         }
 
+        const durationInSeconds = Math.round((Date.now() - recordingStartTime) / 1000);
+
         const formData = new FormData();
         formData.append('audio', audioBlob, `recording.${extension}`);
         formData.append('category', selectedCategory);
         formData.append('author', authorName);
+        formData.append('duration', durationInSeconds);
 
         const response = await fetch(API_URL, {
             method: 'POST',

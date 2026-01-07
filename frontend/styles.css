@@ -21,7 +21,8 @@
     src: url('assets/fonts/inter-regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
-    font-display: optional; /* Optimized */
+    font-display: optional;
+    /* Optimized */
 }
 
 @font-face {
@@ -29,7 +30,8 @@
     src: url('assets/fonts/inter-semibold.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
-    font-display: optional; /* Optimized */
+    font-display: optional;
+    /* Optimized */
 }
 
 /* Bold is preloaded and defined in critical, but good to have here for completeness/fallback?
@@ -102,21 +104,53 @@
     background: #4DB6AC;
 }
 
-.wave-bar:nth-child(1) { animation-delay: 0.0s; }
-.wave-bar:nth-child(2) { animation-delay: 0.1s; }
-.wave-bar:nth-child(3) { animation-delay: 0.2s; }
-.wave-bar:nth-child(4) { animation-delay: 0.3s; }
-.wave-bar:nth-child(5) { animation-delay: 0.4s; }
+.wave-bar:nth-child(1) {
+    animation-delay: 0.0s;
+}
+
+.wave-bar:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.wave-bar:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.wave-bar:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.wave-bar:nth-child(5) {
+    animation-delay: 0.4s;
+}
 
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.6; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 @keyframes wave {
-    0%, 100% { transform: scaleY(0.4); }
-    50% { transform: scaleY(1); }
+
+    0%,
+    100% {
+        transform: scaleY(0.4);
+    }
+
+    50% {
+        transform: scaleY(1);
+    }
 }
 
 /* ========================================
@@ -131,6 +165,16 @@
 .btn-danger:hover:not(:disabled) {
     background: #dc2626;
     transform: translateY(-2px);
+}
+
+.btn:disabled,
+.btn-danger:disabled,
+.btn-secondary:disabled {
+    background: #CBD5E0 !important;
+    color: #718096 !important;
+    cursor: not-allowed;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 /* Secondary Button (Ghost/Outline) */
@@ -205,53 +249,49 @@
    Category Selection
    ======================================== */
 .category-options {
-    display: grid;
-    gap: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 24px;
 }
 
-.category-option {
-    position: relative;
-    cursor: pointer;
-}
-
+/* Segmented Pill/Chip Styling - Simplified */
 .category-label {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: #F8F9FA;
-    border-radius: 20px;
-    transition: var(--transition-base);
-}
-
-.category-icon {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transition: var(--transition-base);
+    padding: 10px 24px;
+    background: #E5E7EB;
+    /* Light gray */
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4B5563;
+    /* Medium gray */
+    font-family: var(--font-main);
+    cursor: pointer;
+    border: none;
 }
 
-.category-icon img {
-    width: 40px;
-    height: 40px;
-    transition: var(--transition-base);
+/* No Hover background change */
+.category-option:hover .category-label {
+    /* Keeping it same as base state for simplicity as requested */
+    background: #E5E7EB;
 }
 
-.category-option input {
-    position: absolute;
-    opacity: 0;
-}
-
-/* Selected State */
+/* Checked State - Static */
 .category-option input:checked+.category-label {
-    background: var(--color-btn-primary);
+    background: #2E2E2E;
+    /* Dark charcoal */
     color: white;
-    font-weight: bold;
+    font-weight: 600;
+}
+
+/* Hidden elements */
+.category-icon,
+.category-label::before,
+.category-label::after {
+    display: none;
 }
 
 .category-text {
@@ -282,7 +322,7 @@
    ======================================== */
 .overlay {
     /* Hidden by default in critical CSS, displayed flex when active */
-    display: none; 
+    display: none;
     position: fixed;
     inset: 0;
     background: rgba(44, 66, 70, 0.9);
@@ -311,8 +351,15 @@
 }
 
 @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .overlay .icon-large {
@@ -342,14 +389,25 @@
 }
 
 @keyframes l13 {
-    100% { transform: rotate(1turn) }
+    100% {
+        transform: rotate(1turn)
+    }
 }
 
 /* ========================================
    Mobile Optimizations (Additional)
    ======================================== */
 @media (max-width: 380px) {
-    .h1 { font-size: 24px; }
-    .timer { font-size: 48px; }
-    .btn { height: 48px; padding: 0 24px; }
+    .h1 {
+        font-size: 24px;
+    }
+
+    .timer {
+        font-size: 48px;
+    }
+
+    .btn {
+        height: 48px;
+        padding: 0 24px;
+    }
 }

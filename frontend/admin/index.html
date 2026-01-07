@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin - Erzähl uns was...</title>
+
+    <!-- Preload Critical Font (Bold only) -->
+    <link rel="preload" href="../assets/fonts/inter-bold.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- External Admin CSS -->
+    <link rel="stylesheet" href="admin.css">
+
+    <!-- Critical CSS from main page -->
+</head>
+
+<body>
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <h1>Admin-Login</h1><input type="password" id="admin-password" class="text-input" placeholder="Passwort"
+                style="margin-bottom: 20px;"><button id="btn-login" class="btn">Login</button>
+            <p id="auth-error" style="color: var(--color-danger); margin-top: 16px; font-weight: 600; display: none;">
+                Falsches Passwort</p>
+        </div>
+    </div>
+    <div class="app-container">
+        <div class="screen-content">
+            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h1 style="margin-bottom: 0;">Story-Übersicht</h1><button id="btn-logout"
+                    style="background:none; border:none; cursor:pointer; color:var(--color-text-secondary); font-weight: 600; text-decoration: underline;">Logout</button>
+            </header>
+            <section class="filter-section">
+                <span>Filter:</span>
+                <div class="filter-group"><input type="radio" name="admin-filter" id="filter-all" value="all"
+                        checked><label for="filter-all" class="filter-label active">Alle</label><input type="radio"
+                        name="admin-filter" id="filter-nina" value="nina"><label for="filter-nina"
+                        class="filter-label">Nina</label><input type="radio" name="admin-filter" id="filter-dani"
+                        value="dani"><label for="filter-dani" class="filter-label">Dani</label><input type="radio"
+                        name="admin-filter" id="filter-beide" value="beide"><label for="filter-beide"
+                        class="filter-label">Beide</label></div><span id="story-count"></span>
+            </section>
+            <div id="story-list" class="story-list">
+                <p style="text-align: center; padding: 40px; color: var(--color-text-secondary);">Lade Stories...</p>
+            </div>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+
+</html>
