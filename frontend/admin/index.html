@@ -27,21 +27,159 @@
     <div class="app-container">
         <div class="screen-content">
             <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h1 style="margin-bottom: 0;">Story-Übersicht</h1><button id="btn-logout"
-                    style="background:none; border:none; cursor:pointer; color:var(--color-text-secondary); font-weight: 600; text-decoration: underline;">Logout</button>
+                <h1 style="margin-bottom: 0;">Story-Übersicht</h1>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button id="btn-open-filter" class="btn-filter-trigger">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="8" x2="16" y2="8"></line>
+                            <circle cx="19" cy="8" r="3"></circle>
+                            <line x1="8" y1="16" x2="20" y2="16"></line>
+                            <circle cx="5" cy="16" r="3"></circle>
+                        </svg>
+                        <span>Filter</span>
+                    </button>
+                    <button id="btn-logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M17 16l4-4-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </header>
-            <section class="filter-section">
-                <span>Filter:</span>
-                <div class="filter-group"><input type="radio" name="admin-filter" id="filter-all" value="all"
-                        checked><label for="filter-all" class="filter-label active">Alle</label><input type="radio"
-                        name="admin-filter" id="filter-nina" value="nina"><label for="filter-nina"
-                        class="filter-label">Nina</label><input type="radio" name="admin-filter" id="filter-dani"
-                        value="dani"><label for="filter-dani" class="filter-label">Dani</label><input type="radio"
-                        name="admin-filter" id="filter-beide" value="beide"><label for="filter-beide"
-                        class="filter-label">Beide</label></div><span id="story-count"></span>
-            </section>
+
+            <div
+                style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; min-height: 20px;">
+                <span id="active-filters"
+                    style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
+                <span id="story-count"
+                    style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
+            </div>
+
             <div id="story-list" class="story-list">
                 <p style="text-align: center; padding: 40px; color: var(--color-text-secondary);">Lade Stories...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Filter Modal -->
+    <div id="filter-overlay" class="filter-overlay hidden">
+        <div id="filter-modal" class="filter-modal">
+            <!-- Main Filter Screen -->
+            <div id="filter-screen-main" class="filter-screen">
+                <header class="filter-modal-header">
+                    <div class="header-placeholder"></div>
+                    <h2>Filter</h2>
+                    <button class="btn-close-filter" onclick="closeFilter()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </header>
+                <div class="filter-modal-content">
+                    <div class="filter-row" onclick="showSubScreen('for')">
+                        <span class="filter-row-label">Für wen</span>
+                        <div class="filter-row-value">
+                            <span id="val-for-whom">Alle</span>
+                            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M9 18l6-6-6-6" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="filter-row" onclick="showSubScreen('by')">
+                        <span class="filter-row-label">Von wem</span>
+                        <div class="filter-row-value">
+                            <span id="val-by-whom">Alle</span>
+                            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M9 18l6-6-6-6" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="filter-row" onclick="toggleTempLiked()">
+                        <span class="filter-row-label">Nur Favoriten</span>
+                        <div class="filter-row-value">
+                            <input type="checkbox" id="temp-liked" style="display: none;">
+                            <div class="check-indicator" id="liked-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="filter-modal-footer">
+                    <button class="btn-clear" onclick="clearAllFilters()">Zurücksetzen</button>
+                    <button id="btn-apply-filter" class="btn-apply" onclick="applyFilters()">0 Stories anzeigen</button>
+                </footer>
+            </div>
+
+            <!-- Sub Filter: Für wen -->
+            <div id="filter-screen-for" class="filter-screen hidden">
+                <header class="filter-modal-header">
+                    <button class="btn-back" onclick="showMainScreen()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M15 18l-6-6 6-6" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <h2>Für wen</h2>
+                    <button class="btn-close-filter" onclick="closeFilter()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </header>
+                <div class="filter-modal-content">
+                    <div class="option-list">
+                        <label class="option-item">
+                            <span>Nina</span>
+                            <span class="count" id="count-for-nina"></span>
+                            <input type="radio" name="temp-for" value="nina">
+                            <div class="radio-indicator"></div>
+                        </label>
+                        <label class="option-item">
+                            <span>Dani</span>
+                            <span class="count" id="count-for-dani"></span>
+                            <input type="radio" name="temp-for" value="dani">
+                            <div class="radio-indicator"></div>
+                        </label>
+                        <label class="option-item">
+                            <span>Beide</span>
+                            <span class="count" id="count-for-beide"></span>
+                            <input type="radio" name="temp-for" value="beide">
+                            <div class="radio-indicator"></div>
+                        </label>
+                    </div>
+                </div>
+                <footer class="filter-modal-footer">
+                    <button class="btn-clear" onclick="clearForFilter()">Zurücksetzen</button>
+                    <button class="btn-apply" onclick="showMainScreen()">0 Stories anzeigen</button>
+                </footer>
+            </div>
+
+            <!-- Sub Filter: Von wem -->
+            <div id="filter-screen-by" class="filter-screen hidden">
+                <header class="filter-modal-header">
+                    <button class="btn-back" onclick="showMainScreen()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M15 18l-6-6 6-6" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                    <h2>Von wem</h2>
+                    <button class="btn-close-filter" onclick="closeFilter()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
+                        </svg>
+                    </button>
+                </header>
+                <div class="filter-modal-content">
+                    <div id="sender-list" class="option-list scrollable">
+                        <!-- Dynamically filled -->
+                    </div>
+                </div>
+                <footer class="filter-modal-footer">
+                    <button class="btn-clear" onclick="clearByFilter()">Zurücksetzen</button>
+                    <button class="btn-apply" onclick="showMainScreen()">0 Stories anzeigen</button>
+                </footer>
             </div>
         </div>
     </div>

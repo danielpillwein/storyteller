@@ -1,105 +1,139 @@
-# 🎙️ Story Recorder
+# 🎙️ Storyteller
 
-Eine leichtgewichtige Web-App zum Aufnehmen von Audio-Stories bei einer Geburtstagsfeier.
+Storyteller ist eine schlanke Web-Anwendung zur Aufnahme von kurzen Audio-Geschichten, optimiert für den Einsatz auf Events (z. B. Geburtstagsfeiern). Gäste können direkt über ihr Smartphone Sprachnachrichten aufnehmen, diese einer Kategorie zuordnen und hochladen. Ein integrierter Admin-Bereich ermöglicht die Verwaltung, Filterung und Wiedergabe der Beiträge.
 
-## 🚀 Schnellstart
+## ✨ Features
 
-### Voraussetzungen
+- **Audio-Recording:** Webbasiertes Recording über die MediaRecorder API (WebM).
+- **Kategorisierung:** Zuordnung der Aufnahmen zu Empfängern (z. B. Nina, Dani, Beide).
+- **Metadaten:** Pflichtangabe des Absendernamens für jede Aufnahme.
+- **FFmpeg-Korrektur:** Automatische Reparatur von WebM-Metadaten (Dauer/Seekable-Status) nach dem Upload.
+- **Admin-Dashboard:** Passwortgeschützte Übersicht mit Filteroptionen für Empfänger, Absender und Favoriten.
+- **Mobile First:** Responsives Soft-UI-Design für reibungslose Bedienung auf Smartphones.
+- **Local-First Storage:** Speicherung von Audio-Dateien und Metadaten im Dateisystem (keine externe Datenbank nötig).
 
-1. **Node.js** (v18 oder höher)
-   - Download: https://nodejs.org/
+## 🛠️ Technologie-Stack
 
-2. **Python** (3.8 oder höher)
-   - Download: https://www.python.org/downloads/
+- **Frontend:** HTML5, Vanilla JavaScript (ES6+), CSS3 (Modern Soft-UI).
+- **Backend:** Node.js, Express.
+- **Processing:** FFmpeg (Remuxing zur Korrektur von WebM-Containern).
+- **Speicherung:** JSON-basierte Metadaten-Zentralverwaltung, Flat-File Audio-Storage.
 
-3. **Browser** (Chrome, Firefox, Safari oder Edge)
+## 📐 Architektur & Konzept
 
-### Installation & Start
+Das Projekt folgt einem klassischen Client-Server-Modell mit Fokus auf Einfachheit und Robustheit:
 
-```bash
-# 1. In das Projektverzeichnis wechseln
-cd story-teller
+1. **Upload-Flow:** Der Client sendet WebM-Blobs und Metadaten via Multi-part POST an den Server.
+2. **Persistence:** Der Server generiert eine eindeutige ID, speichert die Datei flach im System und aktualisiert eine zentrale `metadata.json`.
+3. **Processing:** Unmittelbar nach dem Speichern korrigiert FFmpeg den Audio-Stream, um sicherzustellen, dass die Zeitdauer (`duration`) korrekt im Header hinterlegt ist.
+4. **Admin-Backend:** Eine zustandslose Filter-Logik im Frontend erlaubt granulare Suchen auf den geladenen JSON-Metadaten.
 
-# 2. Server starten (installiert automatisch Abhängigkeiten)
-.\start.bat
-```
+## 📂 Projektstruktur
 
-Die App ist dann erreichbar unter: **http://localhost:3000**
-
-## 📱 Nutzung
-
-1. QR-Code scannen oder URL öffnen
-2. "Aufnahme starten" drücken
-3. Story erzählen
-4. "Stop" drücken
-5. Aufnahme anhören
-6. Kategorie wählen (Nina / Dani / Beide)
-7. "Hochladen" drücken
-8. Fertig! ✨
-
-## 🐳 Deployment mit Docker
-
-Für ein einfaches und persistentes Deployment kann Docker verwendet werden:
-
-### 1. Container starten
-```bash
-docker-compose up -d
-```
-
-### 2. Container stoppen
-```bash
-docker-compose down
-```
-
-**Hinweis:** Die Aufnahmen und Metadaten werden im lokalen Ordner `stories/` gespeichert und bleiben auch beim Neustart des Containers erhalten. FFmpeg ist bereits im Docker-Image enthalten.
-
-
-
-## 📁 Ordnerstruktur
-
-```
-story-teller/
+```text
 ├── backend/
-│   ├── server.js           # Express Server
-│   └── package.json
+│   ├── server.js          # Express-App & API-Endpunkte
+│   └── package.json       # Backend-Abhängigkeiten (FFmpeg-Wrapper, etc.)
 ├── frontend/
-│   ├── index.html          # Single-Page App
-│   ├── styles.css          # Styling
-│   └── app.js              # Logik
-├── stories/                # Gespeicherte Stories
-│   ├── audios/
-│   │   ├── nina/
-│   │   ├── dani/
-│   │   └── beide/
-│   ├── metadata/
-│   │   ├── nina/
-│   │   ├── dani/
-│   │   └── beide/
-│   └── counter.json        # ID-Zähler
-├── README.md
-└── start.bat               # Startet Server
+│   ├── index.html         # Haupt-Recording-UI
+│   ├── app.js             # Client-seitige Recording-Logik
+│   ├── styles.css         # Globales Styling
+│   └── admin/
+│       ├── index.html     # Admin-Interface
+│       └── admin.js       # Admin-Logik & Filter-Management
+├── stories/               # Datenverzeichnis (automatisch generiert)
+│   ├── audios/            # Gespeicherte WebM-Dateien
+│   └── metadata.json      # Zentrales Register aller Aufnahmen
+├── Dockerfile             # Container-Definition
+└── start.bat              # Zentrales Start-Skript für Windows
 ```
 
-## 🔧 Konfiguration
+## 📋 Voraussetzungen
 
-Der Server läuft standardmäßig auf Port 3000.
-Für einen anderen Port:
+- **Node.js:** Version 16.x oder höher.
+- **FFmpeg:** Wird primär über `ffmpeg-static` bezogen, sollte aber für manuelle Tests im Pfad verfügbar sein.
+
+## ⚙️ Installation
+
+1. Repository klonen:
+   ```bash
+   git clone <repository-url>
+   cd story-teller
+   ```
+
+2. Abhängigkeiten im Backend installieren (wird beim ersten Start via `start.bat` automatisch geprüft):
+   ```bash
+   cd backend
+   npm install
+   ```
+
+## 🚀 Starten der Anwendung
+
+Am einfachsten lässt sich die Anwendung unter Windows über die mitgelieferte Batch-Datei starten. Diese prüft automatisch die Abhängigkeiten und startet den Server.
+
+1. **Zentraler Start:**
+   Doppelklick auf die `start.bat` im Hauptverzeichnis oder via Terminal:
+   ```powershell
+   .\start.bat
+   ```
+
+2. **Manueller Start (Alternative):**
+   ```bash
+   cd backend
+   npm start
+   ```
+
+3. **Zugriff über den Browser:**
+   - **Frontend:** `http://localhost:3000` 📱
+   - **Admin:** `http://localhost:3000/admin` 🔐
+
+## 📖 Verwendung
+
+- **Gäste:** Rufen die URL auf, geben ihren Namen ein, wählen einen Empfänger und halten den Record-Button zum Sprechen gedrückt.
+- **Upload:** Nach Abschluss der Aufnahme wird die Datei automatisch übertragen. Eine Bestätigungsseite erscheint nach erfolgreichem Upload.
+- **Speicherung:** Jede Aufnahme erhält eine ID (`001`, `002`, ...) und wird im Ordner `stories/audios/` abgelegt.
+
+## 🛡️ Admin-Bereich
+
+Der Admin-Bereich unter `/admin` (Standard-Passwort: `admin`) bietet folgende Funktionen:
+- **Wiedergabe:** Integrierter Audio-Player für alle Beiträge.
+- **Filterung:**
+  - *Für wen:* Auswahl nach Zielperson.
+  - *Von wem:* Dynamische Liste aller Absender mit Beitragszähler.
+  - *Favoriten:* Anzeige markierter "Highlights".
+- **Management:** Liken (Favorisieren) und Löschen von Beiträgen.
+
+## 🎬 FFmpeg & WebM-Hinweis
+
+Da Browser WebM-Daten oft als Stream ohne vollständige Header aufzeichnen, fehlt beim direkten Abspielen häufig die Zeitangabe. Der Server nutzt FFmpeg, um die Metadaten per `copy`-Codec zu reparieren:
 
 ```bash
-PORT=8080 npm start --prefix backend
+ffmpeg -i input.webm -c copy output.webm
 ```
 
-## 📋 Technische Details
+Falls FFmpeg manuell auf Windows installiert werden soll:
+```powershell
+winget install ffmpeg
+```
 
-- **Frontend**: Vanilla HTML/CSS/JS (kein Framework)
-- **Backend**: Node.js + Express
-- **Audio-Format**: WebM (Browser-nativ)
-- **Audio-Verarbeitung**: Automatisches Fixen von Metadaten und Dauer via FFmpeg (statische Binaries im Projekt enthalten)
+## ⚙️ Konfiguration
 
-## 🎯 Features
+Konfigurationen können direkt in der `backend/server.js` angepasst werden:
+- `PORT`: Standardmäßig `3000`.
+- `ADMIN_PASSWORD`: Das Passwort für den Zugriff auf `/admin`.
+- `STORIES_DIR`: Pfad zum Speichern der Daten.
 
-- ✅ Mobile-optimiert
-- ✅ Automatischer ID-Vergabe
-- ✅ Einfache Bedienung
+## 🧩 Erweiterbarkeit
 
-Keine bekannten Probleme.
+- **Backend-Validierung:** Zusätzliche Checks für Audio-Länge oder Dateitypen.
+- **Auth:** Umstellung des Admin-Passworts auf Umgebungsvariablen (`process.env`).
+- **Storage:** Migration der `metadata.json` zu einer SQLite-Datenbank bei hohem Datenaufkommen.
+
+## ⚠️ Bekannte Einschränkungen
+
+- **Audio-Format:** Derzeit auf WebM (Codec: Opus) beschränkt, da dies der Standard der MediaRecorder API in den meisten mobilen Browsern ist.
+- **Single-Server:** Für den Betrieb in einer Multi-Instance-Umgebung (z. B. K8s) muss ein Shared-Storage für den `stories/`-Ordner konfiguriert werden.
+
+## 📄 Lizenz
+
+Das Projekt ist für den privaten Gebrauch konzipiert. Alle Rechte vorbehalten.

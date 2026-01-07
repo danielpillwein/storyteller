@@ -246,58 +246,77 @@
 }
 
 /* ========================================
-   Category Selection
+   Category Selection (Redesigned)
    ======================================== */
+.category-section {
+    margin-top: 24px;
+    text-align: left;
+}
+
 .category-options {
     display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin-top: 24px;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
 }
 
-/* Segmented Pill/Chip Styling - Simplified */
-.category-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 24px;
-    background: #E5E7EB;
-    /* Light gray */
-    border-radius: 100px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #4B5563;
-    /* Medium gray */
-    font-family: var(--font-main);
+.category-option {
+    display: block;
     cursor: pointer;
-    border: none;
 }
 
-/* No Hover background change */
-.category-option:hover .category-label {
-    /* Keeping it same as base state for simplicity as requested */
-    background: #E5E7EB;
-}
-
-/* Checked State - Static */
-.category-option input:checked+.category-label {
-    background: #2E2E2E;
-    /* Dark charcoal */
-    color: white;
-    font-weight: 600;
-}
-
-/* Hidden elements */
-.category-icon,
-.category-label::before,
-.category-label::after {
+.category-option input {
     display: none;
 }
 
-.category-text {
+.category-label {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+    background: #F8F9FA;
+    border-radius: 28px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--color-text);
-    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.category-option:hover .category-label {
+    background: #F1F3F5;
+    transform: translateY(-1px);
+}
+
+.category-icon {
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.category-icon img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+}
+
+/* Checked State */
+.category-option input:checked+.category-label {
+    background: #4A6369;
+    /* Custom dark teal from image */
+    color: white;
+    box-shadow: 0 10px 25px rgba(74, 99, 105, 0.25);
+}
+
+.category-option input:checked+.category-label .category-icon {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* ========================================
