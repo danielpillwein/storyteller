@@ -15,6 +15,7 @@ let timerInterval = null;
 let audioBlob = null;
 let selectedCategory = null;
 let retryAction = null;
+let initialized = false;
 
 // ========================================
 // DOM Elements (Populated in init)
@@ -26,6 +27,8 @@ let elements = {};
 // Initialization
 // ========================================
 export function init() {
+    if (initialized) return;
+
     // Populate elements
     screens = {
         welcome: document.getElementById('screen-welcome'),
@@ -62,12 +65,13 @@ export function init() {
     }
 
     initEventListeners();
+    initialized = true;
     console.log('Story Recorder initialized');
 }
 
 // Exported for immediate start from bootloader
-export function startRecordingFlow() {
-    startRecording();
+export async function startRecordingFlow() {
+    await startRecording();
 }
 
 // ... Rest of the functions (flattened from IIFE) ...

@@ -36,9 +36,14 @@ const boot = async () => {
         // 3. Load full app
         if (!app) {
             app = await import('./app.js');
+        }
+
+        // Always ensure init is called at least once
+        if (app.init) {
             app.init();
         }
-        app.startRecordingFlow();
+
+        await app.startRecordingFlow();
     } catch (e) {
         console.error('Boot error:', e);
         btn.disabled = false;

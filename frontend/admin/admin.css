@@ -3,7 +3,7 @@
     --color-primary: #6CC7D2;
     --color-card: #FFFFFF;
     --color-text: #2E2E2E;
-    --color-text-secondary: #8A8A8A;
+    --color-text-secondary: #595959;
     --color-btn-primary: #4A6369;
     --color-btn-text: #FFFFFF;
     --color-danger: #DC2626;
@@ -19,7 +19,7 @@
     font-family: 'Inter';
     src: url('../assets/fonts/inter-bold.woff2') format('woff2');
     font-weight: 700;
-    font-display: optional;
+    font-display: swap;
 }
 
 * {
@@ -84,6 +84,14 @@ h1 {
 
 .btn:active {
     transform: scale(0.98);
+}
+
+.btn:focus-visible,
+.text-input:focus-visible,
+.btn-filter-trigger:focus-visible,
+#btn-logout:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .text-input {
@@ -426,8 +434,57 @@ h1 {
     transform: scale(0.96);
 }
 
+
+.story-list {
+    display: grid;
+    gap: 16px;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
 /* Responsive adjustments for mobile (bottom sheet and icon-only buttons) */
 @media (max-width: 500px) {
+    body {
+        padding: 0;
+        align-items: flex-start;
+        background-image: none;
+        background-color: var(--color-card);
+    }
+
+    .app-container {
+        padding: 0;
+        max-width: none;
+    }
+
+    .screen-content {
+        border-radius: 0;
+        box-shadow: none;
+        width: 100%;
+        padding: 0 16px 24px 16px;
+        /* Reset top padding to handle it in sticky header */
+    }
+
+    .admin-header-sticky {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: white;
+        padding: 24px 0 4px 0;
+        margin-bottom: 12px;
+        /* Subtle divider */
+        border-bottom: 1px solid #F3F4F6;
+    }
+
+    .story-list {
+        max-height: 100vh;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+
+    .story-item {
+        border-radius: 16px;
+    }
 
     .btn-filter-trigger span,
     #btn-logout span {
@@ -479,14 +536,6 @@ h1 {
     font-size: 14px;
     color: var(--color-text-secondary);
     font-weight: 600;
-}
-
-.story-list {
-    display: grid;
-    gap: 16px;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 8px;
 }
 
 .story-item {
@@ -551,7 +600,8 @@ h1 {
 
 .btn-like {
     background: #FEE2E2;
-    color: #DC2626;
+    color: #B91C1C;
+    /* Darker red for contrast */
     box-shadow: none;
 }
 
@@ -585,6 +635,7 @@ audio {
     width: 100%;
     height: 36px;
     border-radius: 18px;
+    aspect-ratio: 10 / 1;
 }
 
 .hidden {

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Erzähl uns was...</title>
 
     <!-- Preload Critical Font (Bold only) -->
@@ -24,45 +24,49 @@
                 Falsches Passwort</p>
         </div>
     </div>
-    <div class="app-container">
+    <main class="app-container">
         <div class="screen-content">
-            <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                <h1 style="margin-bottom: 0;">Story-Übersicht</h1>
-                <div style="display: flex; gap: 12px; align-items: center;">
-                    <button id="btn-open-filter" class="btn-filter-trigger">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="4" y1="8" x2="16" y2="8"></line>
-                            <circle cx="19" cy="8" r="3"></circle>
-                            <line x1="8" y1="16" x2="20" y2="16"></line>
-                            <circle cx="5" cy="16" r="3"></circle>
-                        </svg>
-                        <span>Filter</span>
-                    </button>
-                    <button id="btn-logout">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path
-                                d="M17 16l4-4-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <span>Logout</span>
-                    </button>
-                </div>
-            </header>
+            <div class="admin-header-sticky">
+                <header
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h1 style="margin-bottom: 0;">Story-Übersicht</h1>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <button id="btn-open-filter" class="btn-filter-trigger" aria-label="Filter öffnen">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="4" y1="8" x2="16" y2="8"></line>
+                                <circle cx="19" cy="8" r="3"></circle>
+                                <line x1="8" y1="16" x2="20" y2="16"></line>
+                                <circle cx="5" cy="16" r="3"></circle>
+                            </svg>
+                            <span>Filter</span>
+                        </button>
+                        <button id="btn-logout" aria-label="Abmelden">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                aria-hidden="true">
+                                <path
+                                    d="M17 16l4-4-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                </header>
 
-            <div
-                style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; min-height: 20px;">
-                <span id="active-filters"
-                    style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
-                <span id="story-count"
-                    style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
+                <div
+                    style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; min-height: 20px;">
+                    <span id="active-filters"
+                        style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
+                    <span id="story-count"
+                        style="font-size: 14px; color: var(--color-text-secondary); font-weight: 600;"></span>
+                </div>
             </div>
 
-            <div id="story-list" class="story-list">
+            <div id="story-list" class="story-list" aria-live="polite">
                 <p style="text-align: center; padding: 40px; color: var(--color-text-secondary);">Lade Stories...</p>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Modern Filter Modal -->
     <div id="filter-overlay" class="filter-overlay hidden">
@@ -72,8 +76,9 @@
                 <header class="filter-modal-header">
                     <div class="header-placeholder"></div>
                     <h2>Filter</h2>
-                    <button class="btn-close-filter" onclick="closeFilter()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <button class="btn-close-filter" onclick="closeFilter()" aria-label="Filter schließen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            aria-hidden="true">
                             <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
                         </svg>
                     </button>
@@ -116,14 +121,16 @@
             <!-- Sub Filter: Für wen -->
             <div id="filter-screen-for" class="filter-screen hidden">
                 <header class="filter-modal-header">
-                    <button class="btn-back" onclick="showMainScreen()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <button class="btn-back" onclick="showMainScreen()" aria-label="Zurück zum Hauptmenü">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" stroke-linecap="round" />
                         </svg>
                     </button>
                     <h2>Für wen</h2>
-                    <button class="btn-close-filter" onclick="closeFilter()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <button class="btn-close-filter" onclick="closeFilter()" aria-label="Filter schließen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            aria-hidden="true">
                             <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
                         </svg>
                     </button>
@@ -159,14 +166,16 @@
             <!-- Sub Filter: Von wem -->
             <div id="filter-screen-by" class="filter-screen hidden">
                 <header class="filter-modal-header">
-                    <button class="btn-back" onclick="showMainScreen()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <button class="btn-back" onclick="showMainScreen()" aria-label="Zurück zum Hauptmenü">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            aria-hidden="true">
                             <path d="M15 18l-6-6 6-6" stroke-linecap="round" />
                         </svg>
                     </button>
                     <h2>Von wem</h2>
-                    <button class="btn-close-filter" onclick="closeFilter()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <button class="btn-close-filter" onclick="closeFilter()" aria-label="Filter schließen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                            aria-hidden="true">
                             <path d="M18 6L6 18M6 6l12 12" stroke-linecap="round" />
                         </svg>
                     </button>

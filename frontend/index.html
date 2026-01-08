@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Nimm eine Story für Nina und Dani auf!">
     <title>Erzähl uns was</title>
 
@@ -17,7 +17,7 @@
             --color-primary: #6CC7D2;
             --color-card: #FFFFFF;
             --color-text: #2E2E2E;
-            --color-text-secondary: #8A8A8A;
+            --color-text-secondary: #595959;
             --color-btn-primary: #4A6369;
             --color-btn-text: #FFFFFF;
             --color-danger: #DC2626;
@@ -31,7 +31,7 @@
             font-family: 'Inter';
             src: url('assets/fonts/inter-bold.woff2') format('woff2');
             font-weight: 700;
-            font-display: optional;
+            font-display: swap;
         }
 
         * {
@@ -117,6 +117,11 @@
             transform: scale(0.98);
         }
 
+        .btn:focus-visible {
+            outline: 3px solid var(--color-primary);
+            outline-offset: 2px;
+        }
+
         .btn:disabled {
             background: #A0AEC0;
             color: #E2E8F0;
@@ -154,7 +159,7 @@
 </head>
 
 <body>
-    <div class="app-container">
+    <main class="app-container">
         <!-- Screen 1: Welcome (LCP Content) -->
         <div id="screen-welcome" class="screen active">
             <div class="screen-content">
@@ -172,16 +177,16 @@
 
         <!-- Hidden Screens Container -->
         <div id="screen-recording" class="screen">
-            <!-- Content populated by CSS only initially to keep DOM light, but detailed structure needed for app.js -->
             <div class="screen-content">
+                <h1>Aufnahme läuft...</h1>
                 <div class="recording-indicator">
-                    <div class="recording-dot"></div>
+                    <div class="recording-dot" aria-hidden="true"></div>
                     <span>wir hören fleißig zu...</span>
                 </div>
                 <br><br>
-                <div class="timer" id="timer">00:00</div>
+                <div class="timer" id="timer" aria-live="off">00:00</div>
                 <p class="limit-notice">Max. 5 Minuten</p>
-                <div class="waveform">
+                <div class="waveform" aria-hidden="true">
                     <div class="wave-bar"></div>
                     <div class="wave-bar"></div>
                     <div class="wave-bar"></div>
@@ -196,47 +201,51 @@
 
         <div id="screen-preview" class="screen">
             <div class="screen-content">
-                <h2>Danke fürs Erzählen :)<br><br></h2>
-                <div class="audio-player"><audio id="audio-preview" controls></audio></div>
+                <h1>Fast fertig...</h1>
+                <div class="audio-player"><audio id="audio-preview" controls aria-label="Audio Vorschau"></audio></div>
                 <div class="input-group">
-                    <label class="input-label" style="text-align: center;"><br>Wer bist du eigentlich?</label>
-                    <input type="text" id="input-author" class="text-input" placeholder="Dein Name">
+                    <label class="input-label" for="input-author" style="text-align: center;"><br>Wer bist du
+                        eigentlich?</label>
+                    <input type="text" id="input-author" class="text-input" placeholder="Dein Name"
+                        aria-required="true">
                 </div>
                 <div class="category-section">
-                    <label class="input-label"
+                    <span class="input-label"
                         style="text-align: center; display: block; width: 100%; margin-bottom: 20px;">Um wen geht es in
-                        der Story?</label>
+                        der Story?</span>
                     <div class="category-options">
                         <label class="category-option">
                             <input type="radio" name="category" value="nina">
                             <div class="category-label">
-                                <div class="category-icon"><img src="assets/icon-nina.png" alt="Nina"></div>
+                                <div class="category-icon"><img src="assets/icon-nina.png" alt="Nina" loading="lazy">
+                                </div>
                                 <span>Nina</span>
                             </div>
                         </label>
                         <label class="category-option">
                             <input type="radio" name="category" value="dani">
                             <div class="category-label">
-                                <div class="category-icon"><img src="assets/icon-dani.png" alt="Dani"></div>
+                                <div class="category-icon"><img src="assets/icon-dani.png" alt="Dani" loading="lazy">
+                                </div>
                                 <span>Dani</span>
                             </div>
                         </label>
                         <label class="category-option">
                             <input type="radio" name="category" value="beide">
                             <div class="category-label">
-                                <div class="category-icon"><img src="assets/icon-beide.png" alt="Beide"></div>
+                                <div class="category-icon"><img src="assets/icon-beide.png" alt="Beide" loading="lazy">
+                                </div>
                                 <span>Beide</span>
                             </div>
                         </label>
                         <br>
                     </div>
                 </div>
-                <!-- Buttons dynamically updated in JS, but static here for layout -->
                 <div class="button-group">
                     <button id="btn-upload" class="btn" disabled>Hochladen</button>
                     <button id="btn-discard" class="btn"
                         style="background:transparent; color: #8A8A8A; box-shadow:none; margin-top: 10px;">
-                        <img src="assets/icon-discard.svg"
+                        <img src="assets/icon-discard.svg" alt="" aria-hidden="true"
                             style="width:20px; margin-right:8px; vertical-align:middle;">War scheiße, nochmal
                     </button>
                 </div>
@@ -245,7 +254,7 @@
 
         <div id="screen-uploading" class="screen">
             <div class="screen-content">
-                <div class="loader"></div>
+                <div class="loader" aria-hidden="true"></div>
                 <h2>Chill kurz...</h2>
                 <p class="description">Deine Story wird gespeichert.</p>
             </div>
@@ -254,7 +263,7 @@
         <div id="screen-success" class="screen">
             <div class="screen-content">
                 <div class="icon-large">
-                    <img src="assets/icon-success.svg">
+                    <img src="assets/icon-success.svg" alt="Erfolg">
                 </div>
                 <h1>Muchas gracias!</h1>
                 <p class="description">Deine Story wurde erfolgreich gespeichert.</p>
@@ -267,7 +276,7 @@
         <div id="error-overlay" class="overlay">
             <div class="overlay-content">
                 <div class="icon-large" style="background:#FEF2F2; color:#DC2626;">
-                    <img src="assets/icon-error.svg">
+                    <img src="assets/icon-error.svg" alt="Fehler">
                 </div>
                 <h2>Hoppla</h2>
                 <p id="error-message" class="description">Fehler aufgetreten.</p>
@@ -278,7 +287,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </body>
 
 </html>

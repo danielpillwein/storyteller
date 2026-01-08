@@ -94,8 +94,40 @@ function formatId(id) {
 // Initialize directories on startup
 ensureDirectories();
 
-// Middleware
-app.use(compression()); // Enable Gzip/Brotli compression
+// Security Headers
+app.use((req, res, next) => {
+    // Content Security Policy
+    res.setHeader('Content-Security-Policy',
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline'; " + // unsafe-inline needed for some of our bootstrap/deferred logic
+        "style-src 'self' 'unsafe-inline'; " +
+        "img-src 'self' data: blob:; " + // blob needed for recordings
+        "media-src 'self' blob:; " +
+        "connect-src 'self'; " +
+        "font-src 'self'; " +
+        "frame-ancestors 'none'; " +
+        "object-src 'none';"
+    );
+
+    // Strict-Transport-Security (1 year)
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+    // Cross-Origin-Opener-Policy
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+
+    // Cross-Origin-Embedder-Policy
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp'); // Needed for some advanced features or security
+
+    // Prevent Clickjacking
+    res.setHeader('X-Frame-Options', 'DENY');
+
+    // No Sniff
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    next();
+});
+
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 

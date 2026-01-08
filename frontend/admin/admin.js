@@ -13,6 +13,7 @@ let activeFilterLiked = false; // Only show liked stories
 let tempFilterFor = 'all';
 let tempFilterBy = [];
 let tempFilterLiked = false; // Temporary state for liked filter
+let lastFocusedElement = null;
 
 // DOM Elements
 const authOverlay = document.getElementById('auth-overlay');
@@ -30,6 +31,9 @@ const btnOpenFilter = document.getElementById('btn-open-filter');
 function init() {
     if (currentPassword) {
         checkAuthAndLoad();
+    } else {
+        // Initial focus for better UX/Best Practice
+        if (passwordInput) passwordInput.focus();
     }
 
     loginBtn.addEventListener('click', () => {
@@ -73,10 +77,40 @@ function init() {
             updateUI();
         }
     });
+
+    // Keyboard listeners
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !filterOverlay.classList.contains('hidden')) {
+            closeFilter();
+        }
+
+        // Focus trapping
+        if (e.key === 'Tab' && !filterOverlay.classList.contains('hidden')) {
+            const trapElements = filterOverlay.querySelectorAll('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            const focusables = Array.from(trapElements).filter(el => el.offsetParent !== null);
+            if (focusables.length === 0) return;
+
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    last.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    first.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    });
 }
 
 // Modal Toggle
 window.openFilter = () => {
+    lastFocusedElement = document.activeElement;
     tempFilterFor = activeFilterFor;
     tempFilterBy = [...activeFilterBy];
     tempFilterLiked = activeFilterLiked;
@@ -84,10 +118,19 @@ window.openFilter = () => {
     showMainScreen();
     renderSenderList();
     updateUI();
+
+    // Set focus to the first meaningful element (back or close button)
+    setTimeout(() => {
+        const closeBtn = filterOverlay.querySelector('.btn-close-filter');
+        if (closeBtn) closeBtn.focus();
+    }, 50);
 };
 
 window.closeFilter = () => {
     filterOverlay.classList.add('hidden');
+    if (lastFocusedElement) {
+        lastFocusedElement.focus();
+    }
 };
 
 // Navigation
@@ -323,20 +366,20 @@ function renderStories() {
                 <div style="font-size: 11px; font-weight: bold; color: #CBD5E0;">ID: ${story.id}</div>
             </div>
             
-            <audio controls preload="none">
+            <audio controls preload="none" aria-label="Audio Wiedergabe">
                 <source src="/${story.audio_path}" type="audio/webm">
                 Dein Browser unterstützt kein Audio.
             </audio>
 
             <div class="story-actions">
-                <button class="btn btn-sm btn-like ${story.liked ? 'active' : ''}" onclick="toggleLike('${story.id}')">
-                    <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <button class="btn btn-sm btn-like ${story.liked ? 'active' : ''}" onclick="toggleLike('${story.id}')" aria-label="${story.liked ? 'Favorit entfernen' : 'Favorit hinzufügen'}">
+                    <svg class="admin-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
                     ${story.liked ? 'geliked' : 'liken'}
                 </button>
-                <button class="btn btn-sm btn-delete" onclick="deleteStory('${story.id}')">
-                    <img src="../assets/icon-trash.svg" class="admin-icon" alt="Löschen">
+                <button class="btn btn-sm btn-delete" onclick="deleteStory('${story.id}')" aria-label="Story löschen">
+                    <img src="../assets/icon-trash.svg" class="admin-icon" alt="" aria-hidden="true">
                     Löschen
                 </button>
             </div>
