@@ -100,11 +100,11 @@ app.use((req, res, next) => {
     res.setHeader(
       'Content-Security-Policy',
       "default-src 'self'; " +
-      "script-src 'self' 'unsafe-inline' https://cloud.umami.is; " +
+      "script-src 'self' 'unsafe-inline'; " + 
       "style-src 'self' 'unsafe-inline'; " +
       "img-src 'self' data: blob:; " +
       "media-src 'self' blob:; " +
-      "connect-src 'self' https://cloud.umami.is; " +
+      "connect-src 'self' https://api-gateway.umami.dev; " + 
       "font-src 'self'; " +
       "frame-ancestors 'none'; " +
       "object-src 'none';"
