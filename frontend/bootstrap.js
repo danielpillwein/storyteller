@@ -5,12 +5,14 @@
   if (window.umami) return;
 
   const script = document.createElement('script');
-  script.src = 'https://cloud.umami.is/script.js';
-  script.defer = true;
+  script.src = '/stats.js';
+  script.async = true;
   script.setAttribute(
     'data-website-id',
-    'DA07287E-5D59-4BD8-B1B9-5C6DFD3B154A' // <-- DEINE ID
+    'da07287e-5d59-4bd8-b1b9-5c6dfd3b154a'
   );
+  document.head.appendChild(script);
+
 
   script.onload = () => {
     console.log('[stats] umami loaded');
