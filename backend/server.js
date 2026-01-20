@@ -325,6 +325,14 @@ app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+app.get('/stats.js', async (req, res) => {
+  const r = await fetch('https://cloud.umami.is/script.js');
+
+  res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.send(await r.text());
+});
+
 // --- ADMIN API ---
 
 // Simple password check middleware
