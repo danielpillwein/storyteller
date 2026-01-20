@@ -29,6 +29,10 @@ let elements = {};
 export function init() {
     if (initialized) return;
 
+    if (window.umami) {
+      umami.track('app_loaded');
+    }
+    
     // Populate elements
     screens = {
         welcome: document.getElementById('screen-welcome'),
@@ -147,6 +151,10 @@ function getSupportedMimeType() {
 }
 
 async function startRecording() {
+    if (window.umami) {
+      umami.track('recording_started');
+    }
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             audio: {
@@ -184,6 +192,12 @@ async function startRecording() {
         };
 
         mediaRecorder.onstop = () => {
+            if (window.umami) {
+              umami.track('recording_finished', {
+                duration: Math.round((Date.now() - recordingStartTime) / 1000)
+              });
+            }
+            
             stream.getTracks().forEach(track => track.stop());
             const blobType = mediaRecorder.mimeType || 'audio/webm';
             audioBlob = new Blob(audioChunks, { type: blobType });
@@ -223,6 +237,10 @@ function stopRecording() {
 async function uploadRecording() {
     const authorInput = document.getElementById('input-author');
     const authorName = authorInput.value.trim();
+
+    if (window.umami) {
+      umami.track('upload_started');
+    }
 
     if (!authorName) {
         showError('Bitte gib deinen Namen ein.', () => {
@@ -272,9 +290,19 @@ async function uploadRecording() {
             throw new Error(data.error || 'Upload fehlgeschlagen');
         }
 
+        if (window.umami) {
+          umami.track('upload_success', {
+            category: selectedCategory
+          });
+        }
+
         showScreen('success');
 
     } catch (error) {
+        if (window.umami) {
+          umami.track('upload_failed');
+        }
+        
         console.error('Upload error:', error);
         showError(
             error.message || 'Verbindung zum Server fehlgeschlagen. Bitte versuche es erneut.',
