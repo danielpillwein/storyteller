@@ -238,10 +238,10 @@ async function uploadRecording() {
     const authorInput = document.getElementById('input-author');
     const authorName = authorInput.value.trim();
 
-    if (window.umami) {
+    if (authorName && audioBlob && selectedCategory && window.umami) {
       umami.track('upload_started');
     }
-
+    
     if (!authorName) {
         showError('Bitte gib deinen Namen ein.', () => {
             authorInput.focus();
