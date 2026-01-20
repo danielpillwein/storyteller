@@ -97,16 +97,17 @@ ensureDirectories();
 // Security Headers
 app.use((req, res, next) => {
     // Content Security Policy
-    res.setHeader('Content-Security-Policy',
-        "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline'; " + // unsafe-inline needed for some of our bootstrap/deferred logic
-        "style-src 'self' 'unsafe-inline'; " +
-        "img-src 'self' data: blob:; " + // blob needed for recordings
-        "media-src 'self' blob:; " +
-        "connect-src 'self'; " +
-        "font-src 'self'; " +
-        "frame-ancestors 'none'; " +
-        "object-src 'none';"
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; " +
+      "script-src 'self' 'unsafe-inline' https://cloud.umami.is; " +
+      "style-src 'self' 'unsafe-inline'; " +
+      "img-src 'self' data: blob:; " +
+      "media-src 'self' blob:; " +
+      "connect-src 'self' https://cloud.umami.is; " +
+      "font-src 'self'; " +
+      "frame-ancestors 'none'; " +
+      "object-src 'none';"
     );
 
     // Strict-Transport-Security (1 year)
