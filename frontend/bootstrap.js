@@ -1,27 +1,31 @@
-/**
- * Lighthouse 100/100 Bootstrap
- * Zero logic during load. Lazy loads app.js on interaction.
- */
-
+// ===============================
+// Analytics (Umami)
+// ===============================
 (function loadUmami() {
   if (window.umami) return;
 
-  const s = document.createElement('script');
-  s.src = 'https://cloud.umami.is/script.js';
-  s.defer = true;
-  s.setAttribute('data-website-id', 'da07287e-5d59-4bd8-b1b9-5c6dfd3b154a');
+  const script = document.createElement('script');
+  script.src = 'https://cloud.umami.is/script.js';
+  script.defer = true;
+  script.setAttribute(
+    'data-website-id',
+    'DA07287E-5D59-4BD8-B1B9-5C6DFD3B154A' // <-- DEINE ID
+  );
 
-  s.onload = () => {
+  script.onload = () => {
     console.log('[stats] umami loaded');
   };
 
-  s.onerror = () => {
-    console.warn('[stats] umami blocked or failed');
+  script.onerror = () => {
+    console.warn('[stats] umami blocked');
   };
 
-  document.head.appendChild(s);
+  document.head.appendChild(script);
 })();
 
+// ===============================
+// Start of Code
+// ===============================
 
 // Critical Elements
 const btn = document.getElementById('btn-start');
