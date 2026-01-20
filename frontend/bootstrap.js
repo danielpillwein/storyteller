@@ -3,6 +3,26 @@
  * Zero logic during load. Lazy loads app.js on interaction.
  */
 
+(function loadUmami() {
+  if (window.umami) return;
+
+  const s = document.createElement('script');
+  s.src = 'https://cloud.umami.is/script.js';
+  s.defer = true;
+  s.setAttribute('data-website-id', 'da07287e-5d59-4bd8-b1b9-5c6dfd3b154a');
+
+  s.onload = () => {
+    console.log('[stats] umami loaded');
+  };
+
+  s.onerror = () => {
+    console.warn('[stats] umami blocked or failed');
+  };
+
+  document.head.appendChild(s);
+})();
+
+
 // Critical Elements
 const btn = document.getElementById('btn-start');
 let app = null;
